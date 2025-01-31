@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Mommy Nest</title>
+    <style>
+        :root {
+            --gradient-start: #9333EA;
+            --gradient-end: #4F46E5;
+            --bg-dark: #121212;
+            --card-dark: #1E1E1E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A3A3A3;
+        }
+
+        body {
+            width: 360px;
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        .container {
+            background: var(--card-dark);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .help-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .help-modal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--card-dark);
+            padding: 24px;
+            border-radius: 16px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .developer-info {
+            margin-top: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .email {
+            color: var(--gradient-start);
+            font-weight: bold;
+        }
+
+        /* Rest of the existing styles */
+        .stats-card {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+            color: white;
+        }
+
+        .filter-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .filter-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-card.active {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 28px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            right: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(-22px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <div>
+                    <h2 style="margin: 0">Mommy Nest V1.3 </h2>
+                    <p style="margin: 4px 0; color: var(--text-secondary)">حماية من المحتوى الغير مرغوب</p>
+                </div>
+            </div>
+            <button class="help-button" id="helpButton">?</button>
+        </div>
+
+        <div class="stats-card">
+            <div style="text-align: center; margin-bottom: 16px;">
+                <h3 style="margin: 0">المواقع المحظورة</h3>
+                <div style="font-size: 32px; font-weight: bold;" id="blockedCount">0</div>
+            </div>
+        </div>
+
+        <div class="filter-options">
+            <div class="filter-card" id="generalFilter">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>الحماية العامة</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleMainFilter">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="filter-card" id="socialFilter">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>مواقع التواصل</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleSocialFilter">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="help-modal" id="helpModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">×</button>
+            <h3>عن الإضافة</h3>
+            <div class="developer-info">
+                هذه الإضافة من تطوير:<br>
+                <span class="email">bahathedeveloper@gmail.com</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
